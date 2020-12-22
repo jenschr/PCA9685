@@ -14,4 +14,4 @@ You can also pass PCA9685_ALL to any mentod to toggle all outputs at once:
 
 `outputs.off(PCA9685_ALL);`
 
-
+Note that by default, all outputs are on when using inverted setup + totem drivers (for driving External P-type MOSFET's). If you are sinking current directly through the driver (@5V), you probably don't want to set PCA9685_OUTDRV. Just remove it below. See datasheet for details https://www.nxp.com/docs/en/data-sheet/PCA9685.pdf 
