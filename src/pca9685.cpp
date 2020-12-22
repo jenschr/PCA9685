@@ -45,12 +45,61 @@ void PCA9685::setPWM(uint8_t ledNum, uint16_t OnValue, uint16_t OffValue)
 
 void PCA9685::on(uint8_t ledNum)
 {
-    setPWM(ledNum,0,0);
+    int result = 9;
+    uint8_t targetAddress = PCA9685_LED0_ON_H+(ledNum*4);
+    if( ledNum == PCA9685_ALL )
+    {
+        targetAddress = PCA9685_ALL_LED_ON_H;
+    }
+
+    unsigned char buf[2];
+    buf[0]= targetAddress;
+    buf[1]= 0x00;
+    Wire.beginTransmission(_addr);
+    Wire.write(buf,2);
+    result = Wire.endTransmission();
+
+    if( result > 0)
+    {
+        #ifdef PCA9685_SHOW_ERRORS_ON_SERIAL
+        Serial.print("PCA9685 ERROR ");
+        Serial.print(result);
+        Serial.print(" on address ");
+        Serial.print(targetAddress,HEX);
+        Serial.print(" on led ");
+        Serial.println(ledNum);
+        #endif
+    }
 }
 
 void PCA9685::off(uint8_t ledNum)
 {
-    setPWM(ledNum,0,4095);
+    int result = 9;
+    uint8_t targetAddress = PCA9685_LED0_ON_H+(ledNum*4);
+    if( ledNum == PCA9685_ALL )
+    {
+        targetAddress = PCA9685_ALL_LED_ON_H;
+    }
+
+    unsigned char buf[2];
+    buf[0]= targetAddress;
+    buf[1]= 0x10;
+    Wire.beginTransmission(_addr);
+    Wire.write(buf,2);
+    result = Wire.endTransmission();
+
+    if( result > 0)
+    {
+        #ifdef PCA9685_SHOW_ERRORS_ON_SERIAL
+        Serial.print("PCA9685 ERROR ");
+        Serial.print(result);
+        Serial.print(" on address ");
+        Serial.print(targetAddress,HEX);
+        Serial.print(" on led ");
+        Serial.println(ledNum);
+        #endif
+    }
+
 }
 
 bool PCA9685::reset(void)
